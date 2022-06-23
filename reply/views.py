@@ -49,7 +49,7 @@ def update(request, bid):
 
     if request.method == "GET":
         replyForm = ReplyForm(instance=reply)
-        return render(request, 'reply/create.html')
+        return render(request, 'reply/create.html',)
 
     elif request.method == "POST":
         replyForm = ReplyForm(request.POST, instance=reply) # 객체 생성
