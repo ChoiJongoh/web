@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # app이 생기면 계속 추가해주어야 한다.
     'board',
     'reply',
 ]
@@ -62,6 +63,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR/'templates'],
+        # templates폴더를 사용하기 위한 설정, 경로가 잡혀있음.
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,7 +85,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': secrets['NAME'],
+        'NAME': secrets['NAME'], #생성한 DB이름,
         'USER': secrets['USER'],
         'PASSWORD': secrets['PASSWORD'],
         'HOST': secrets['HOST'],
@@ -130,7 +132,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static/' # 보통은 상대경로로 쓴다. 지금은 절대경로로 사용
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]

@@ -23,7 +23,8 @@ def create(request): # form 태그로 입력한 것을 우리에게 보내줌. �
         return redirect('/board/read/'+str(post.id))
 
 
-def list(request):
+def list(request): # 저장한 내용을 보여주는 것
+    # 여러 개를 가져올 것인가 하나를 가져올 것인가
     posts = Post.objects.all().order_by('-id')
     context = {'posts': posts}
     return render(request, 'board/list.html', context)

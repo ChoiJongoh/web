@@ -32,7 +32,8 @@
     <hr />
     <div class="form-group">
         <!-- Name input-->
-        <form action="/reply/create/{{ post.id }}" method="post"> <!-- action이 없으면 보낸 url 다시 보낸다. -->
+        <form action="/reply/create/{{ post.id }}" method="post"> <!-- action이 없으면 보낸 url로 다시 보낸다. post방식으로 전달 -->
+            <!-- 댓글이 저장되게 하는 코드 호출 -->
             {% csrf_token %}
             <input name="contents" type="text" placeholder="댓글 내용을 입력해주세요" class="form-control" />
             <button class="btn btn-primary text-uppercase" >
@@ -41,9 +42,9 @@
 
 
             <ul class="list-inline">
-                {% for reply in post.reply_set.all %}
+                {% for reply in post.reply_set.all %} <!-- for [변수] in context -->
                 <li>
-                    <strong>{{ reply.writer }}</strong>
+                    <strong>{{ reply.writer }}</strong> <!-- 변수.작성자 -->
                     {{ reply.contents }}
                 </li>
                 {% endfor %}

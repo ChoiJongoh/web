@@ -21,8 +21,8 @@ import user.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    path('board/create', board.views.create),
+    # 크롬 접속기록 자동저장에 의한 오류 주의
+    path('board/create', board.views.create), # ID값에 해당 주소로 접근해라
     path('board/list', board.views.list),
     path('board/read/<int:bid>', board.views.read),
     path('board/delete/<int:bid>', board.views.delete),
@@ -32,7 +32,11 @@ urlpatterns = [
     path('user/login', user.views.login),
     path('user/logout', user.views.logout),
 
-    path('reply/create/<int:bid>', reply.views.create),
+    path('reply/create/<int:bid>', reply.views.create), # <int:bid> DB의 번호를 받으려는 상황
+    path('reply/list', reply.views.list_print),
+    path('reply/read/<int:bid>', reply.views.read),  # <정수형:이름>의 변수를 생성한 것
+    path('reply/delete/<int:bid>', reply.views.delete),
+    path('reply/update/<int:bid>', reply.views.update),
 
     path('like/<int:bid>', board.views.like),
 
