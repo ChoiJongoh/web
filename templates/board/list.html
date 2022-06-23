@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contents %}
+
+        <section class="page-section bg-light" id="portfolio">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">게시판</h2>
+                    <h3 class="section-subheading text-muted">jongo의 Django</h3>
+                </div>
+                <div class="row">
+                    {% for post in posts %}
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <!-- Portfolio item 1-->
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" href="/board/read/{{ post.id }}">
+                                <!-- board의 게시글 조회 함수의 게시판 번호 -->
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="{% static 'assets/img/portfolio/1.jpg '%}" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">{{ post.title }}</div>
+                                <div class="portfolio-caption-subheading text-muted">{{ post.writer }}</div>
+                                <div class="portfolio-caption-heading" onclick="sendRequest( {{ post.id }}, this )">
+                                    {% if request.user in post.like.all %} <!-- post모델의 like를 가져옴 -->
+                                        ♥   {{ post.like.count }}
+                                    {% else %}
+                                        ♡   {{ post.like.count }}
+                                    {% endif %}
+                                </div>
+                                <!-- this는 태그 전부를 가져옴 -->
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <script>
+                        function sendRequest(bid, event) {
+                            var httpRequest = new XMLHttpRequest(); // 객체 생성
+                            httpRequest.onreadystatechange = function() { // 응답 받는 코드
+                                if (httpRequest.readyState == XMLHttpRequest.DONE && httpRequest.status == 200 ) {
+                                    console.log(httpRequest.responseText);
+
+                                    var json_data = JSON.parse(httpRequest.responseText);
+                                    // 딕셔너리 형태여도 받아오는 건 문자열이다. JSon 파싱 필요
+                                    if(json_data['message']=='added'){ //json은 딕셔너리, 딕셔너리_key가 ok이면 실행
+                                        event.innerText = '♥'+' '+json_data['like_cnt'];
+                                    } else {
+                                        event.innerText = '♡'+' '+json_data['like_cnt'];
+                                    }
+                                }
+                            };
+                            // GET 방식으로 요청을 보내면서 데이터를 동시에 전달함. 요청할 URL만 추가
+                            httpRequest.open("GET", "/like/"+bid, true);
+                            httpRequest.send();
+                        }
+                    </script>
+                </div>
+            </div>
+        </section>
+
+
+{% endblock %}

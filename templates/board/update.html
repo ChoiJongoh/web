@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contents %}
+
+<section class="page-section bg-light" id="portfolio">
+<div class="container"> <!-- 여백을 주는 코드 -->
+    <form method="post">
+        {% csrf_token %}
+        <input name="title" value="{{ post.title }}" type="text">
+        <textarea name="contents" id="summernote">{{ post.contents }}</textarea>
+        <Button>게시글 작성</Button>
+    </form>
+
+
+    <script>
+      $('#summernote').summernote({
+        placeholder: '내용을 입력해 주세요.',
+        tabsize: 2,
+        height: 120,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['table', ['table']],
+          ['insert', ['link', 'picture', 'video']],
+          ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+      });
+    </script>
+</div>
+</section>
+
+
+{% endblock %}
