@@ -83,11 +83,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': secrets['web'],
-        'USER': secrets['root'],
-        'PASSWORD': secrets['qwer1234'],
-        'HOST': secrets['192.168.16.25'],
-        'PORT': secrets['3306'],
+        'NAME': secrets['NAME'],
+        'USER': secrets['USER'],
+        'PASSWORD': secrets['PASSWORD'],
+        'HOST': secrets['HOST'],
+        'PORT': secrets['PORT'],
         'OPTIONS': {
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
         }
