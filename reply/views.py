@@ -36,24 +36,25 @@ def create(request, bid): #게시글 번호 받아오기
 @login_required(login_url='/user/login')
 def delete(request, bid):
     reply = Reply.objects.get(id=bid)
+    print(reply)
     if request.user != reply.writer:
         return redirect('/board/read/'+str(bid))
     reply.delete()
-    return redirect('/reply/list') # 댓글 수정 창으로
+    return redirect('/board/read')
 
 @login_required(login_url='/user/login')
 def update(request, bid):
     reply = Reply.objects.get(id=bid)
+    #print(reply)
     if request.user != reply.writer:
         return redirect('/board/read/'+str(bid))
 
-    if request.method == "GET":
+    if request.method == "GET": # 댓글 수정 창으로
         replyForm = ReplyForm(instance=reply)
         return render(request, 'reply/create.html',)
 
     elif request.method == "POST":
-        replyForm = ReplyForm(request.POST, instance=reply) # 객체 생성
-        # instance = instance화 : 클래스라는 빈 틀에 객체로 채운다.(변수 초기화 같은 것)
+        replyForm = ReplyForm(request.POST, instance=reply)
         if replyForm.is_valid():
             data_save = replyForm.save(commit=False)
             data_save()

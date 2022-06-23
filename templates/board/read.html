@@ -47,9 +47,22 @@
                     <strong>{{ reply.writer }}</strong> <!-- 변수.작성자 -->
                     {{ reply.contents }}
                 </li>
+                {% if request.user == post.writer %}
+
+                    <button class="btn btn-primary text-uppercase"  type="button" onclick = "location.href = '/reply/update/{{ post.id }}' ">
+                        <i class="fas fa-mark me-1"></i>
+                        댓글 수정
+                    </button>
+
+                    <button class="btn btn-primary text-uppercase"  type="button" onclick = "location.href = '/reply/delete/{{ post.id }}' ">
+                        <i class="fas fa-xmark me-1"></i>
+                        댓글 삭제
+                    </button>
+                    {% endif %}
                 {% endfor %}
             </ul>
         </form>
+
     </div>
 
 </div>

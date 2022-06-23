@@ -31,8 +31,8 @@ def list(request): # 저장한 내용을 보여주는 것
 
 def read(request, bid):
     post = Post.objects.prefetch_related('reply_set').get(id=bid)
-    replyForm = ReplyForm()
-    context = {'post': post, 'replyForm': replyForm }
+    replyForm = ReplyForm() # 댓글 폼 생성
+    context = {'post': post, 'replyForm': replyForm } # 게시판 댓글 같이 전송
     return render(request, 'board/read.html', context)
 
 @login_required(login_url='/user/login')
@@ -54,7 +54,8 @@ def update(request, bid):
         return render(request, "board/update.html", context)
 
     elif request.method=="POST":
-        postForm = PostForm(request.POST, instance=post)
+        postForm = PostForm(request.POST, instance=post) # 객체 생성
+        # instance = instance화 : 클래스라는 빈 틀에 객체로 채운다.(변수 초기화 같은 것)
         if postForm.is_valid():
             post = postForm.save(commit=False)
             post.save()
