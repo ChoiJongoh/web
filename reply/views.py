@@ -33,34 +33,28 @@ def create(request, bid): #게시글 번호 받아오기
 
 # 댓글 수정 삭제 추가 계획
 
-def read(request, bid):
-    #db_get = DB_model.objects.get(Q(id=bid)) # bid변수에 담긴 id를 Q에
-
-    db_get = Reply.objects.prefetch_related('reply_set').get(id=bid)
-
-    db_form = ReplyForm()
-    # form 객체 생성, form 불러오기
-    context = {'db_get' : db_get, 'db_form' : db_form }
-
-    return render(request, 'reply/read.html', context)
-
 @login_required(login_url='/user/login')
 def delete(request, bid):
-    db_get = Reply.objects.get(id=bid)
-    db_get.delete()
-
-    return redirect('/reply/list_print')
+    reply = Reply.objects.get(id=bid)
+    if request.user != reply.writer:
+        return redirect('/board/read/'+str(bid))
+    reply.delete()
+    return redirect('/reply/list') # 댓글 수정 창으로
 
 @login_required(login_url='/user/login')
 def update(request, bid):
-    db_get = Reply.objects.get(id=bid)
+    reply = Reply.objects.get(id=bid)
+    if request.user != reply.writer:
+        return redirect('/board/read/'+str(bid))
+
     if request.method == "GET":
-        db_form = ReplyForm(instance=db_get) # 객체 생성
-        # instance = instance화 : 클래스라는 빈 틀에 객체로 채운다.(변수 초기화 같은 것)
+        replyForm = ReplyForm(instance=reply)
         return render(request, 'reply/create.html')
+
     elif request.method == "POST":
-        db_form = ReplyForm(request.POST, instance=db_get)
-        if db_form.is_valid():
-            data_save = db_form.save(commit=False)
+        replyForm = ReplyForm(request.POST, instance=reply) # 객체 생성
+        # instance = instance화 : 클래스라는 빈 틀에 객체로 채운다.(변수 초기화 같은 것)
+        if replyForm.is_valid():
+            data_save = replyForm.save(commit=False)
             data_save()
         return redirect('/reply/read/' + str(data_save.id))
