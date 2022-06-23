@@ -29,5 +29,6 @@ def signup(request):
         signupForm = UserCreationForm(request.POST)
         if signupForm.is_valid():
             user = signupForm.save(commit=False)
+
             user.save()
         return redirect('/board/list')
