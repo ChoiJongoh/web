@@ -8,7 +8,7 @@ from reply.forms import ReplyForm
 
 
 @login_required(login_url='/user/login')
-def create(request):
+def create(request): # form 태그로 입력한 것을 우리에게 보내줌. 서버에 저장
     if request.method == "GET":
         postForm = PostForm()
         context = {'postForm': postForm}
