@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from board.models import Post
 from reply.forms import ReplyForm
+from reply.models import Reply
 
 
 @login_required(login_url='/user/login')
@@ -35,9 +36,9 @@ def create(request, bid): #게시글 번호 받아오기
 def read(request, bid):
     #db_get = DB_model.objects.get(Q(id=bid)) # bid변수에 담긴 id를 Q에
 
-    db_get = DB_model.objects.prefetch_related('reply_set').get(id=bid)
+    db_get = Reply.objects.prefetch_related('reply_set').get(id=bid)
 
-    db_form = DB_form()
+    db_form = ReplyForm()
     # form 객체 생성, form 불러오기
     context = {'db_get' : db_get, 'db_form' : db_form }
 
@@ -45,20 +46,20 @@ def read(request, bid):
 
 @login_required(login_url='/user/login')
 def delete(request, bid):
-    db_get = DB_model.objects.get(id=bid)
+    db_get = Reply.objects.get(id=bid)
     db_get.delete()
 
     return redirect('/reply/list_print')
 
 @login_required(login_url='/user/login')
 def update(request, bid):
-    db_get = DB_model.objects.get(id=bid)
+    db_get = Reply.objects.get(id=bid)
     if request.method == "GET":
-        db_form = DB_form(instance=db_get) # 객체 생성
+        db_form = ReplyForm(instance=db_get) # 객체 생성
         # instance = instance화 : 클래스라는 빈 틀에 객체로 채운다.(변수 초기화 같은 것)
         return render(request, 'reply/create.html')
     elif request.method == "POST":
-        db_form = DB_form(request.POST, instance=db_get)
+        db_form = ReplyForm(request.POST, instance=db_get)
         if db_form.is_valid():
             data_save = db_form.save(commit=False)
             data_save()
