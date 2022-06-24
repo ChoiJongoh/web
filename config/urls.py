@@ -13,11 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 import board.views
 import reply.views
 import user.views
+from config import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +33,7 @@ urlpatterns = [
     path('user/signup', user.views.signup),
     path('user/login', user.views.login),
     path('user/logout', user.views.logout),
+    path('activate/<str:uid64>/<str:token>/', user.views.activate, name="activate"),
 
     path('reply/create/<int:bid>', reply.views.create), # <int:bid> DB의 번호를 받으려는 상황
     # <정수형:이름>의 변수를 생성한 것
@@ -39,4 +42,5 @@ urlpatterns = [
 
     path('like/<int:bid>', board.views.like),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# 미디어 경로를 추가해준다.

@@ -45,7 +45,19 @@ INSTALLED_APPS = [
     # app이 생기면 계속 추가해주어야 한다.
     'board',
     'reply',
+
 ]
+
+SITE_ID = 1
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com' # 메일 호스트 서버
+EMAIL_PORT = '587' #메일 통신 포트
+EMAIL_HOST_USER = secrets['EMAIL_HOST_USER'] # 발신 이메일
+EMAIL_HOST_PASSWORD = secrets['EMAIL_HOST_PASSWORD'] # 발신 이메일의 비밀번호
+EMAIL_USE_TLS = True # TLS 보안.
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -136,6 +148,10 @@ STATIC_URL = '/static/' # 보통은 상대경로로 쓴다. 지금은 절대경�
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+MEDIA_URL = '/media/' # 장고에서 아는 게 아니라 우리가 만들어준 변수 일 뿐
+MEDIA_ROOT = BASE_DIR / 'media' # list 형식이 아닌 string 형식으로
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

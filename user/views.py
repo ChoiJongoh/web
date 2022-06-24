@@ -1,7 +1,16 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from .tokens import account_activation_token
+from django.contrib import auth
 
 def logout(request):
     auth_logout(request)
@@ -32,5 +41,39 @@ def signup(request):
         if signupForm.is_valid():
             user = signupForm.save(commit=False)
 
+            user.is_active = False # 유저 비활성화
+
             user.save()
+
+            current_site = get_current_site(request)
+
+            message = render_to_string('account/activation_email.html',                         {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
+                'token': account_activation_token.make_token(user),
+            })
+
+            mail_subject = "회원가입 계정 활성화 인증 메일."
+            user_email = request.POST["email"]
+            email = EmailMessage(mail_subject, message, to=[user_email])
+            email.send()
+
         return redirect('/board/list')
+
+
+# 계정 활성화 함수(토큰을 통해 인증)
+def activate(request, uid64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uid64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExsit):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+
+        auth.login(request, user)
+        return redirect("/board/list")
+
+    return HttpResponse('비정상적인 접근입니다.')

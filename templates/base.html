@@ -27,10 +27,15 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
-                        {% if request.user.is_authenticated %} <!-- 로그인 비교 확인 코드 -->
+
+                        {% if request.user.is_authenticated and request.user != NULL  %} <!-- 로그인 비교 확인 코드 -->
                         <!--li class="nav-item"><a class="nav-link" href="/user/mypage">내정보</a></li-->
                         <li class="nav-item"><a class="nav-link" href="/user/logout">로그아웃</a></li>
                         <li class="nav-item"><a class="nav-link" href="/board/create">게시글 작성</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/board/list">게시판</a></li>
+                        {% elif request.user == NULL %}
+                        <li class="nav-item"><a class="nav-link" href="/user/login">로그인</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/user/signup">회원가입</a></li>
                         <li class="nav-item"><a class="nav-link" href="/board/list">게시판</a></li>
                         {% else %}
                         <li class="nav-item"><a class="nav-link" href="/user/login">로그인</a></li>

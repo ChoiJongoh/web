@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from board.forms import PostForm
-from board.models import Post
+from board.models import Post, PostImage
 from reply.forms import ReplyForm
 
 
@@ -20,6 +20,12 @@ def create(request): # form 태그로 입력한 것을 우리에게 보내줌. �
             post = postForm.save(commit=False)
             post.writer = request.user
             post.save()
+            for image in request.FILES.getlist('image', None): # 그냥은 1:1일 때, for문은 1:다일 때
+                postImage = PostImage()
+                postImage.image = image
+                postImage.post = post
+                postImage.save()
+
         return redirect('/board/read/'+str(post.id))
 
 
@@ -30,9 +36,12 @@ def list(request): # 저장한 내용을 보여주는 것
     return render(request, 'board/list.html', context)
 
 def read(request, bid):
-    post = Post.objects.prefetch_related('reply_set').get(id=bid)
+    post = Post.objects.prefetch_related('reply_set', 'postimage_set').get(id=bid)
     replyForm = ReplyForm() # 댓글 폼 생성
-    context = {'post': post, 'replyForm': replyForm } # 게시판 댓글 같이 전송
+
+    postImage = PostImage()
+
+    context = {'post': post, 'replyForm': replyForm, 'image_set': postImage } # 게시판 댓글 같이 전송
     return render(request, 'board/read.html', context)
 
 @login_required(login_url='/user/login')
