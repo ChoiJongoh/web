@@ -9,11 +9,11 @@ from reply.forms import ReplyForm
 
 @login_required(login_url='/user/login')
 def create(request): # form 태그로 입력한 것을 우리에게 보내줌. 서버에 저장
-    if request.method == "GET":
+    if request.method == "GET": #사용자 입력으로 올 때
         postForm = PostForm()
         context = {'postForm': postForm}
         return render(request, "board/create.html", context)
-    elif request.method == "POST":
+    elif request.method == "POST": # 로그인 상태, 서버에서 올 때
         postForm = PostForm(request.POST)
 
         if postForm.is_valid():
@@ -61,6 +61,8 @@ def update(request, bid):
             post.save()
         return redirect('/board/read/'+str(bid))
 
+
+# 좋아요 함수
 @login_required(login_url='/user/login') # 로그인 정보 있다면 추가
 def like(request, bid):
     post = Post.objects.get(id=bid) # 게시글 번호를 담은 board 모델
