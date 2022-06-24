@@ -54,7 +54,7 @@ def signup(request):
                 'token': account_activation_token.make_token(user),
             })
 
-            mail_subject = "회원가입 계정 활성화 인증 메일."
+            mail_subject = "회원가입 계정 활성화 인증 메일"
             user_email = request.POST["email"]
             email = EmailMessage(mail_subject, message, to=[user_email])
             email.send()

@@ -58,6 +58,16 @@ EMAIL_HOST_PASSWORD = secrets['EMAIL_HOST_PASSWORD'] # 발신 이메일의 비�
 EMAIL_USE_TLS = True # TLS 보안.
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True # 유저가 get방식으로 들어올 때 허용을 해 줄거냐?
+# 링크 클릭하면 회원가입
+#ACCOUNT_AUTHENTICATION_METHOD = 'email' #로그인 시 email이 ID가 됨
+ACCOUNT_EMAIL_REQUIRED = True   # 회원가입 시 필수 이메일 하게
+#ACCOUNT_USERNAME_REQUIRED = False # USERNAME을 필수 항목에서 제거
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory' # none, optional 도 있음.
+# 로그인 인증 하지 않으면 로그인 할 수 없다.
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+ACCOUNT_EMAIL_SUBJECT_PREFIX = '이메일 인증'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
