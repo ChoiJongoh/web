@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
+
+import accounts.views
 import board.views
 import reply.views
 import user.views
@@ -41,6 +43,11 @@ urlpatterns = [
     path('reply/update/<int:bid>', reply.views.update),
 
     path('like/<int:bid>', board.views.like),
+
+  path('kakaologin', accounts.views.kakaoLoginPage),
+  path('oauth/redirect', accounts.views.getcode),
+  path('accounts/profile', accounts.views.profile),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # 미디어 경로를 추가해준다.

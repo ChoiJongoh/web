@@ -1,10 +1,12 @@
-from django.contrib.sites import requests
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.contrib.auth import login
+from django.contrib.auth.models import User
+import requests
 
 # Create your views here.
 def kakaoLoginPage(request) :
-    return render(request, 'login.html')
+    return render(request, 'user/login.html')
 
 
 def getcode(request) :
@@ -23,15 +25,16 @@ def getcode(request) :
 
     headers = { 'Authorization': 'Bearer ' + access_token,
                 'Content-type' : 'application/x-www-form-urlencoded;charset=utf-8'}
+
     res = requests.get('https://kapi.kakao.com/v2/user/me', headers=headers)
     profile_json = res.json()
     print(profile_json)
 
     kakaoid = profile_json['id']
-    from django.contrib.auth.models import User
+
     user = User.objects.filter(email=kakaoid).first() # 게시판 번호 가져옴
     if user is not None :
-        from django.contrib.auth import login
+
         login(request, user, backend='django.contrib.auth.backends.ModelBackend') # login 함수로 전달
     else:
         user = User()  # 유저 저장하기
