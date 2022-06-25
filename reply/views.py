@@ -15,7 +15,7 @@ def create(request, bid): #게시글 번호 받아오기
         print(request.POST.get('contents'))
 
         if replyForm.is_valid():
-            print('aa')
+            print('ok_valid')
             reply = replyForm.save(commit=False)  # bid는 변수에 바로 저장이 안 됨
             # 저장된 댓글 열기
             reply.writer = request.user  # 열린 데이터의 작성자에 유저 정보 담기
@@ -35,11 +35,16 @@ def create(request, bid): #게시글 번호 받아오기
 
 @login_required(login_url='/user/login')
 def delete(request, bid):
+    print('in delete func')
     reply = Reply.objects.get(id=bid)
     print(reply)
     if request.user != reply.writer:
+        print('in if')
         return redirect('/board/read/'+str(bid))
+
+    print('no_delete')
     reply.delete()
+    print('ok_delete')
     return redirect('/board/read')
 
 @login_required(login_url='/user/login')

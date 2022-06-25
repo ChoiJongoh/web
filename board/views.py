@@ -37,6 +37,7 @@ def list(request): # 저장한 내용을 보여주는 것
 
 def read(request, bid):
     post = Post.objects.prefetch_related('reply_set', 'postimage_set').get(id=bid)
+    print(post)
     replyForm = ReplyForm() # 댓글 폼 생성
 
     postImage = PostImage()
