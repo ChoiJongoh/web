@@ -28,6 +28,7 @@ urlpatterns = [
     # 크롬 접속기록 자동저장에 의한 오류 주의
     path('board/create', board.views.create), # ID값에 해당 주소로 접근해라
     path('board/list', board.views.list),
+    path('', board.views.list),
     path('board/read/<int:bid>', board.views.read),
     path('board/delete/<int:bid>', board.views.delete),
     path('board/update/<int:bid>', board.views.update),

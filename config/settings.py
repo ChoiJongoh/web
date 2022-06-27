@@ -29,9 +29,11 @@ SECRET_KEY = secrets['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# DEBUG 설정 error를 사용자들이 보면 안 된다. 에러 발생시켜서 공격하지 못하게 False
 
 ALLOWED_HOSTS = []
-
+# 접속시켜주는 host가 누구냐? 기본적으로 Django는 허용 X
+# * = 모든 것이라고 뜻함.
 
 # Application definition
 
