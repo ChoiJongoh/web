@@ -47,9 +47,9 @@ urlpatterns = [
 
     path('like/<int:bid>', board.views.like),
 
-  path('kakaologin', accounts.views.kakaoLoginPage),
-  path('oauth/redirect', accounts.views.getcode),
-  path('accounts/profile', accounts.views.profile),
+    path('kakaologin', accounts.views.kakaoLoginPage),
+    path('oauth/redirect', accounts.views.getcode),
+    path('accounts/profile', accounts.views.profile),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

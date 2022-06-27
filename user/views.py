@@ -63,9 +63,7 @@ def signup(request):
 
     elif request.method=="POST":
         signupForm = UserCreationForm(request.POST)
-        print(signupForm)
         if signupForm.is_valid():
-            print(1)
             user = signupForm.save(commit=False)
 
             user.is_active = False # 유저 비활성화

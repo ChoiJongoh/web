@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 import requests
@@ -36,17 +36,18 @@ def getcode(request) :
     kakaoid = profile_json['id']
 
     user = User.objects.filter(email=kakaoid).first() # 게시판 번호 가져옴
-    if user is not None : #사용자 정보가 우리 DB에 없으면 가입
+    if user is not None : #사용자 정보가 우리 DB에 있으면 로그인
 
         login(request, user, backend='django.contrib.auth.backends.ModelBackend') # login 함수로 전달
-    else: # 있으면 로그인
+    else: # 없으면 가입
+
         user = User()  # 유저 저장하기
         user.email = kakaoid
         user.username = profile_json['properties']['nickname']
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend') # login 함수로 전달
-
-    return render(request, 'board/list.html' )
+    return redirect('/board/list')
 
 def profile(request) :
-    HttpResponse('account/profile.html')
+
+    return render(request, 'account/profile.html')
