@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # app이 생기면 계속 추가해주어야 한다.
     'board',
     'reply',
+    'bootstrap4',
 
 ]
 

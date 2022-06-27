@@ -9,7 +9,6 @@
                 <!-- Project details-->
                 <h2 class="text-uppercase">{{ post.title }}</h2>
                 <p class="item-intro text-muted">{{ post.writer }}</p>
-                <img class="img-fluid d-block mx-auto" src="media/{{ postImage.image }}" alt="..." />
                 <p>{{ post.contents | safe }}</p>
 
                 {% if request.user == post.writer %}

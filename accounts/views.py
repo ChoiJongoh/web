@@ -1,10 +1,57 @@
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.models import User
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
 import requests
+from .forms import CustomUserChangeForm
 
 # Create your views here.
+
+@login_required(login_url='/user/login')
+def user_update(request):
+    if request.method=="GET":
+        form = UserChangeForm(instance=request.user)
+        context = {'form': form}
+        return render(request, 'account/update.html', context)
+    elif request.method=="POST":
+        form = CustomUserChangeForm(request.POST, instance=request.usr)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+
+@login_required(login_url='/user/login')
+def user_delete(request):
+    if request.user.is_authenticated:
+        request.user.delete()
+        auth_logout(request)
+    return redirect('/')
+
+
+def password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        # 키워드인자명을 함께 써줘도 가능
+        # form = PasswordChangeForm(user=request.user, data=request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('/accounts/profile')
+    else:
+        form = PasswordChangeForm(request.user)
+    context = {'form': form}
+    return render(request, 'account/password.html', context)
+
+def profile(request) :
+
+    return render(request, 'account/profile.html')
+
+
+# 카카오 로그인
 def kakaoLoginPage(request) :
     return render(request, 'user/login.html')
 
@@ -47,7 +94,3 @@ def getcode(request) :
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend') # login 함수로 전달
     return redirect('/board/list')
-
-def profile(request) :
-
-    return render(request, 'account/profile.html')

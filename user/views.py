@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
@@ -12,28 +11,6 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .tokens import account_activation_token
 from django.contrib import auth
-from .forms import CustomUserChangeForm
-
-@login_required(login_url='/user/login')
-def user_update(request):
-    if request.method=="GET":
-        form = UserChangeForm(instance=request.user)
-        context = {
-            'form': form,
-        }
-        return render(request, 'accounts/update.html', context)
-    elif request.method=="POST":
-        form = CustomUserChangeForm(request.POST, instance=request.usr)
-        if form.is_valid():
-            form.save()
-            return
-
-@login_required(login_url='/user/login')
-def user_delete(request):
-    if request.user.is_authenticated:
-        request.user.delete()
-        auth_logout(request)
-    return redirect('/')
 
 def logout(request):
     auth_logout(request)

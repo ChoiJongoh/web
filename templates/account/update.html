@@ -1,12 +1,24 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load bootstrap4 %}
 {% block contents %}
-<h1>User Edit</h1>
+<section class="page-section bg-light" id="portfolio">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="modal-body">
+            <h1>User Edit</h1>
 
-<form method="POST">
-    {% csrf_token %}
+            <form method="POST">
+                {% csrf_token %}
 
-    {% bootstrap_form user_change_form %}
-    <input type="submit" value="Submit"/>
-</form>
+                {% bootstrap_form form %}
+                <input type="submit" value="Submit"/>
+            </form>
+            <a href="/password">비밀밀호 변경</a>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
 {% endblock %}
