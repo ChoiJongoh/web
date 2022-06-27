@@ -51,7 +51,9 @@ def login(request):
             # request에는 사용자의 정보가 들어있다.
             # request 안에 POST가 들어있다.
             # 로그인 성공, 실패 비교 코드가 포함되어있다.
-        return redirect('/board/list')
+            return redirect('/board/list')
+        return render(request, 'user/login.html')
+
 # Create your views here.
 def signup(request):
     if request.method=="GET":
@@ -61,7 +63,9 @@ def signup(request):
 
     elif request.method=="POST":
         signupForm = UserCreationForm(request.POST)
+        print(signupForm)
         if signupForm.is_valid():
+            print(1)
             user = signupForm.save(commit=False)
 
             user.is_active = False # 유저 비활성화
@@ -81,9 +85,8 @@ def signup(request):
             user_email = request.POST["email"]
             email = EmailMessage(mail_subject, message, to=[user_email])
             email.send()
-
-        return render(request, 'user/email_notice.html')
-
+            return render(request, 'user/email_notice.html')
+        return render(request, 'user/signup_error.html')
 
 # 계정 활성화 함수(토큰을 통해 인증)
 def activate(request, uid64, token):

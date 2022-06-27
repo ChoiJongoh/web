@@ -36,6 +36,8 @@ urlpatterns = [
     path('user/signup', user.views.signup),
     path('user/login', user.views.login),
     path('user/logout', user.views.logout),
+    path('user/delete', user.views.user_delete),
+    path('user/update', user.views.user_update),
     path('activate/<str:uid64>/<str:token>/', user.views.activate, name="activate"),
 
     path('reply/create/<int:bid>', reply.views.create), # <int:bid> DB의 번호를 받으려는 상황

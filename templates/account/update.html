@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block contents %}
-<div class="container">
-    <div class="text-center">
-        <h1>이메일 인증을 받으세요!</h1>
-    </div>
-</div>
+<h1>User Edit</h1>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {% bootstrap_form user_change_form %}
+    <input type="submit" value="Submit"/>
+</form>
 {% endblock %}

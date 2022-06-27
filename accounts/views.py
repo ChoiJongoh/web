@@ -46,7 +46,7 @@ def getcode(request) :
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend') # login 함수로 전달
 
-    return HttpResponse(code)
+    return render(request, 'board/list.html' )
 
 def profile(request) :
     HttpResponse('account/profile.html')

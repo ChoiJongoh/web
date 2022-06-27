@@ -35,17 +35,12 @@ def create(request, bid): #게시글 번호 받아오기
 
 @login_required(login_url='/user/login')
 def delete(request, bid):
-    print('in delete func')
-    reply = Reply.objects.get(id=bid)
-    print(reply)
+    post = Post.objects.get(id=bid)
+    reply = Reply.objects.get()
     if request.user != reply.writer:
-        print('in if')
         return redirect('/board/read/'+str(bid))
-
-    print('no_delete')
     reply.delete()
-    print('ok_delete')
-    return redirect('/board/read')
+    return redirect('/board/read'+str(bid))
 
 @login_required(login_url='/user/login')
 def update(request, bid):
