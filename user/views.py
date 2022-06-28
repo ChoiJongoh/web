@@ -11,6 +11,8 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .tokens import account_activation_token
 from django.contrib import auth
+from django.contrib import messages
+
 
 def logout(request):
     auth_logout(request)
@@ -60,6 +62,9 @@ def signup(request):
             user_email = request.POST["email"]
             email = EmailMessage(mail_subject, message, to=[user_email])
             email.send()
+
+            #userModel.email = user_email
+            #userModel.save()
             return render(request, 'user/email_notice.html')
         return render(request, 'user/signup_error.html')
 

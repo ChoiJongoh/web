@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -6,6 +7,19 @@ from board.models import Post
 from reply.forms import ReplyForm
 from reply.models import Reply
 
+# 좋아요 함수
+@login_required(login_url='/user/login') # 로그인 정보 있다면 추가
+def like(request, bid):
+    reply = Reply.objects.get(id=bid) # 게시글 번호를 담은 board 모델
+    # post.like.add(request.user) # 로그인 한 사용자 정보
+    user = request.user
+    if reply.like.filter(id=user.id).exists() : # get은 하나 filter는 여러 개 뽑아옴, 인덱스로 접근
+        #filter의 id는 user 밑의 id를 자동으로 찾아준다.
+        reply.like.remove(user)
+        return JsonResponse({'message': 'deleted', 'like_cnt':reply.like.count()})
+    else :
+        reply.like.add(user)
+        return JsonResponse({'message': 'added', 'like_cnt':reply.like.count()})
 
 @login_required(login_url='/user/login')
 def create(request, bid): #게시글 번호 받아오기
@@ -36,14 +50,18 @@ def create(request, bid): #게시글 번호 받아오기
 @login_required(login_url='/user/login')
 def delete(request, bid):
     post = Post.objects.get(id=bid)
-    reply = Reply.objects.get()
+    reply = Reply.objects.get(id=bid)
     if request.user != reply.writer:
         return redirect('/board/read/'+str(bid))
-    reply.delete()
-    return redirect('/board/read'+str(bid))
+    if request.method == "POST":
+        reply.delete()
+        return redirect('/board/read/' + str(bid))
+    else:
+        return redirect('/board/read'+str(bid))
 
 @login_required(login_url='/user/login')
 def update(request, bid):
+    post = Post.objects.get(id=bid)
     reply = Reply.objects.get(id=bid)
     #print(reply)
     if request.user != reply.writer:
@@ -57,5 +75,5 @@ def update(request, bid):
         replyForm = ReplyForm(request.POST, instance=reply)
         if replyForm.is_valid():
             data_save = replyForm.save(commit=False)
-            data_save()
+            data_save.save()
         return redirect('/reply/read/' + str(data_save.id))

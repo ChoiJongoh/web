@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from board.forms import PostForm
 from board.models import Post, PostImage
 from reply.forms import ReplyForm
-
+from django.contrib import messages
 from django.core.paginator import Paginator
 
 @login_required(login_url='/user/login')
@@ -16,10 +16,23 @@ def create(request): # form 태그로 입력한 것을 우리에게 보내줌. �
         return render(request, "board/create.html", context)
     elif request.method == "POST": # 로그인 상태, 서버에서 올 때
         postForm = PostForm(request.POST)
+        context = {
+            'postForm':postForm,
+            'has_error':False, # 에러 변수 생성
+        }
 
         if postForm.is_valid():
             post = postForm.save(commit=False)
+            post.title = request.POST.get('title')
+            if len(post.title) < 5:
+                messages.add_message(request, messages.ERROR, '제목은 5글자 이상이어야 합니다!')
+                # warning 등으로 경고 등급을 나눌 수 있다
+                context['has_error'] = True  # 에러가 있을 때 트루
+
             post.writer = request.user
+
+            if context['has_error']:
+                return render(request, 'board/create.html', context, status=400)
             post.save()
             for image in request.FILES.getlist('image', None): # 그냥은 1:1일 때, for문은 1:다일 때
                 postImage = PostImage()

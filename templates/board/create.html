@@ -7,9 +7,17 @@
     <form method="post">
         {% csrf_token %}
         <input name="title" type="text">
+        {% if messages %}
+            {% for message in messages %}<!-- 리스트 형식이라 반복문으로 해주어야 한다. -->
+                {% if message.tags == 'error' %}
+                    {{ message }} <!-- 원하는 부분에 원하는 디자인으로 경고 및 등급 가능 -->
+                {% endif %}
+            {% endfor %}
+        {% endif %}
         <textarea name="contents" id="summernote"></textarea>
         <Button>게시글 작성</Button>
     </form>
+
 
 
     <script>
