@@ -8,6 +8,13 @@
                     <h2 class="section-heading text-uppercase">게시판</h2>
                     <h3 class="section-subheading text-muted">jongo의 Django</h3>
                 </div>
+                <div>
+                    <form class="form-inline my-2 my-lg-0" action="/board/search" method="post">
+                        {% csrf_token %}
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" value="{{q}}">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
                 <div class="row">
                     {% for post in posts %}
                     <div class="col-lg-4 col-sm-6 mb-4">
@@ -35,6 +42,9 @@
                         </div>
                     </div>
                     {% endfor %}
+
+
+
                     <script>
                         function sendRequest(bid, event) {
                             var httpRequest = new XMLHttpRequest(); // 객체 생성

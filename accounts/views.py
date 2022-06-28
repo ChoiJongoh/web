@@ -12,6 +12,14 @@ from .forms import CustomUserChangeForm
 
 # Create your views here.
 
+#@login_required(login_url='/user/login')
+def read(request):
+    user = User.objects.get()
+    print(user)
+
+    context = {'user': user} # 게시판 댓글 같이 전송
+    return render(request, 'board/read.html', context)
+
 @login_required(login_url='/user/login')
 def user_update(request):
     if request.method=="GET":

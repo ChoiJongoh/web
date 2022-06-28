@@ -6,6 +6,7 @@ from board.forms import PostForm
 from board.models import Post, PostImage
 from reply.forms import ReplyForm
 
+from django.core.paginator import Paginator
 
 @login_required(login_url='/user/login')
 def create(request): # form 태그로 입력한 것을 우리에게 보내줌. 서버에 저장
@@ -85,3 +86,29 @@ def like(request, bid):
     else :
         post.like.add(user)
         return JsonResponse({'message': 'added', 'like_cnt':post.like.count()})
+
+
+def search(request):
+    posts = Post.objects.all().order_by('-id')
+    q = request.POST.get('q', "")
+
+    if q:
+        post = posts.filter(title__icontains=q)
+        return render(request, 'board/search.html', {'post': post, 'q': q})
+
+    else:
+        return render(request, 'board/search.html')
+
+def index(request):
+    page = request.GET.get('page', 1)  # 페이지 / GET방식으로 page를 파라미터로 가져올 때 사용, 파라미터 없이 들어올 때 dafault값을 1로 줌.
+
+    # 조회
+    post_list = Post.objects.order_by('-id')  # -로 역순
+
+    # 페이징
+    paginator = Paginator(post_list, 9)  # 한 페이지당 개수
+    page_obj = paginator.get_page(page)
+
+    context = {'post_list': page_obj}
+    # return HttpResponse('Hi pybo') # Hi pybo를 response해라
+    return render(request, 'board/list.html', context)

@@ -32,6 +32,8 @@ urlpatterns = [
     path('board/read/<int:bid>', board.views.read),
     path('board/delete/<int:bid>', board.views.delete),
     path('board/update/<int:bid>', board.views.update),
+    path('board/search', board.views.search),
+    path('board/index', board.views.index),
 
     path('user/signup', user.views.signup),
     path('user/login', user.views.login),

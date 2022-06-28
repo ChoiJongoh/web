@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contents %}
+
+<section class="page-section bg-light" id="portfolio">
+    <div class="container">
+    {% if not post %}
+    <script>console.log('hi')</script>
+        <h1>검색 결과가 없습니다</h1>
+
+    {% else %}
+
+        {% for post in post.all %}
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <h1>{{ post.title }}</h1>
+                    {{ post.writer }}
+
+                </div>
+            </div>
+        </div>
+        <br>
+        {% endfor %}
+
+    {% endif %}
+    </div>
+</section>
+
+
+{% endblock %}
